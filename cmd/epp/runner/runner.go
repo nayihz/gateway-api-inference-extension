@@ -20,6 +20,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"time"
 
 	"github.com/go-logr/logr"
 	"github.com/prometheus/client_golang/prometheus"
@@ -110,6 +111,10 @@ var (
 	loraInfoMetric = flag.String("loraInfoMetric",
 		"vllm:lora_requests_info",
 		"Prometheus metric for the LoRA info metrics (must be in vLLM label format).")
+	metricsStalenessThreshold = flag.Duration("metricsStalenessThreshold",
+		200*time.Millisecond,
+		"Duration after which metrics are considered stale. This is used to determine if a pod's metrics "+
+			"are fresh enough to be used for scheduling decisions.")
 	// configuration flags
 	configFile = flag.String("configFile", "", "The path to the configuration file")
 	configText = flag.String("configText", "", "The configuration specified as text, in lieu of a file")
@@ -187,7 +192,8 @@ func (r *Runner) Run(ctx context.Context) error {
 		return err
 	}
 	verifyMetricMapping(*mapping, setupLog)
-	pmf := backendmetrics.NewPodMetricsFactory(&backendmetrics.PodMetricsClientImpl{MetricMapping: mapping}, *refreshMetricsInterval)
+	pmf := backendmetrics.NewPodMetricsFactory(&backendmetrics.PodMetricsClientImpl{MetricMapping: mapping},
+		*refreshMetricsInterval, *metricsStalenessThreshold)
 
 	datastore := datastore.NewDatastore(ctx, pmf)
 

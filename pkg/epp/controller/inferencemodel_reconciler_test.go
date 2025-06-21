@@ -194,7 +194,7 @@ func TestInferenceModelReconciler(t *testing.T) {
 				WithObjects(initObjs...).
 				WithIndex(&v1alpha2.InferenceModel{}, datastore.ModelNameIndexKey, indexInferenceModelsByModelName).
 				Build()
-			pmf := backendmetrics.NewPodMetricsFactory(&backendmetrics.FakePodMetricsClient{}, time.Second)
+			pmf := backendmetrics.NewPodMetricsFactory(&backendmetrics.FakePodMetricsClient{}, time.Second, 200*time.Millisecond)
 			ds := datastore.NewDatastore(t.Context(), pmf)
 			for _, m := range test.modelsInStore {
 				ds.ModelSetIfOlder(m)

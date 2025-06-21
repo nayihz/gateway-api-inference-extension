@@ -59,11 +59,6 @@ func LoadConfigFromEnv() *Config {
 		cfg.KVCacheUtilThreshold = DefaultKVCacheUtilThreshold
 	}
 
-	cfg.MetricsStalenessThreshold = envutil.GetEnvDuration(EnvSdMetricsStalenessThreshold, DefaultMetricsStalenessThreshold, logger)
-	if cfg.MetricsStalenessThreshold <= 0 {
-		cfg.MetricsStalenessThreshold = DefaultMetricsStalenessThreshold
-	}
-
 	// NewDetector validates the config and assigns defaults.
 	logger.Info("SaturationDetector configuration loaded from env", "config", fmt.Sprintf("%+v", cfg))
 	return cfg

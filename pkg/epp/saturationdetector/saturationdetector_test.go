@@ -120,9 +120,6 @@ func TestNewDetector(t *testing.T) {
 			if detector.config.KVCacheUtilThreshold != test.expectedKVCacheUtilThreshold {
 				t.Errorf("NewDetector() KVCacheUtilThreshold = %f, want %f", detector.config.KVCacheUtilThreshold, test.expectedKVCacheUtilThreshold)
 			}
-			if detector.config.MetricsStalenessThreshold != test.expectedStalenessThreshold {
-				t.Errorf("NewDetector() MetricsStalenessThreshold = %v, want %v", detector.config.MetricsStalenessThreshold, test.expectedStalenessThreshold)
-			}
 		})
 	}
 }

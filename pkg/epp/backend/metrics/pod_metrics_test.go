@@ -61,7 +61,7 @@ var (
 func TestMetricsRefresh(t *testing.T) {
 	ctx := context.Background()
 	pmc := &FakePodMetricsClient{}
-	pmf := NewPodMetricsFactory(pmc, time.Millisecond)
+	pmf := NewPodMetricsFactory(pmc, time.Millisecond, 200*time.Millisecond)
 
 	// The refresher is initialized with empty metrics.
 	pm := pmf.NewPodMetrics(ctx, pod1, &fakeDataStore{})
